@@ -1,5 +1,4 @@
 from dotenv import load_dotenv
-load_dotenv()
 import json
 import tempfile
 from flask import Flask, request, jsonify
@@ -190,8 +189,8 @@ if __name__ == "__main__":
     print("GET  /health")
     print("=" * 50)
 
-    app.run(
-        host="0.0.0.0",
-        port=5000,
-        debug=False
-    )
+app.run(
+    host="0.0.0.0",
+    port=int(os.environ.get("PORT", 5000)),
+    debug=False
+)

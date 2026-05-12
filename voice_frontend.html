@@ -266,12 +266,13 @@
 <input id="backend-url" type="text" placeholder="https://your-backend.onrender.com" value=""/>  <button onclick="checkHealth()">Connect</button>
 </div>
 
+
 <!-- ── Chat area ───────────────────────────────────────────────────────────── -->
 <div id="chat-wrap">
   <div id="messages">
     <div id="empty">
       <div class="icon">🎙</div>
-      <p>Type a message or hold the mic button to speak.<br/>Your voice, amplified by Gemini AI.</p>
+      <p>Type a message or hold the mic button to speak.<br/>Your voice, powered by VOXA AI.</p>
     </div>
   </div>
   <canvas id="wave-canvas"></canvas>
@@ -299,8 +300,16 @@ let isRecording   = false;
 let analyser      = null;
 let animFrame     = null;
 
-const BACKEND = () => document.getElementById("backend-url").value.trim().replace(/\/+$/, "");
+const DEPLOYED_BACKEND = "https://ai-voice-assistant-8jyd.onrender.com";
 
+document.getElementById("backend-url").value =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "http://localhost:5000"
+    : DEPLOYED_BACKEND;
+
+const BACKEND = () =>
+  document.getElementById("backend-url").value.trim().replace(/\/+$/, "");
 // ── DOM refs ─────────────────────────────────────────────────────────────────
 const messagesEl = document.getElementById("messages");
 const textInput  = document.getElementById("text-input");
@@ -320,8 +329,8 @@ async function checkHealth() {
     const r = await fetch(`${BACKEND()}/health`, {signal: AbortSignal.timeout(3000)});
     if (r.ok) {
       connDot.className   = "dot";
-      connLabel.textContent = "gemini-2.0-flash";
-    } else throw new Error();
+      connLabel.textContent = "VOXA online";
+        } else throw new Error();
   } catch {
     connDot.className   = "dot off";
     connLabel.textContent = "offline — start backend";
